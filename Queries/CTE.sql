@@ -1,0 +1,50 @@
+--Find the average amount paid by the top 5 customers
+
+WITH avg_amount_paid (customer_id,first_name, last_name, country, city,amount) AS
+(SELECT A.customer_id,
+B.first_name,
+B.last_name,
+E.country,
+D.city,
+SUM (A.amount)AS total_amount_paid
+FROM payment A
+INNER JOIN customer b ON a.customer_id = b.customer_id
+INNER JOIN address c ON b.address_id =c.address_id
+INNER JOIN city d ON C. city_id = D. city_id
+INNER JOIN country e ON D.country_id = E.country_id
+WHERE city IN ('Cianjur' , 'Acua' , 'So Leopoldo' , 'Iwaki' , 'Ambattur' , 'Shanwei' , 'Teboksary'
+, 'Tianjin' , 'Hami' , 'Bhusawal' )
+GROUP BY a.customer_id, first_name, last_name, city, country
+ORDER BY SUM (amount) DESC
+LIMIT 5)
+SELECT AVG (amount)
+FROM avg_amount_paid
+
+--Find out how many of the top 5 customers are based within each country
+
+WITH top_5_customers (customer_id,first_name, last_name, country, city,total_paid_amount ) AS
+(SELECT A.customer_id,
+B.first_name,
+B.last_name,
+E.country,
+D.city,
+SUM (A.amount) AS total_amount_paid
+FROM payment A
+INNER JOIN customer b ON a.customer_id = b.customer_id
+INNER JOIN address c ON b.address_id =c.address_id
+INNER JOIN city d ON C. city_id = D. city_id
+INNER JOIN country e ON D.country_id = E.country_id
+GROUP BY a.customer_id, first_name, last_name, city, country
+ORDER BY SUM (amount) DESC
+LIMIT 5)
+SELECT D.country,
+COUNT(DISTINCT A.customer_id) AS all_customer_count,
+COUNT(DISTINCT top_5_customers) AS top_customer_count
+FROM customer a
+INNER JOIN address b ON A.ADDRESS_ID = B.ADDRESS_ID
+INNER JOIN CITY C ON B.CITY_ID = C.CITY_ID
+INNER JOIN COUNTRY D ON C.COUNTRY_ID = D.COUNTRY_ID
+LEFT JOIN top_5_customers ON A.customer_id = top_5_customers.customer_id
+GROUP BY d.country
+HAVING COUNT (top_5_customers) > 0
+ORDER BY all_customer_count DESC
