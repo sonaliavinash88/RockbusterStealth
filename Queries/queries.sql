@@ -1,5 +1,5 @@
-# Descriptive analysis of Film Table
-"SELECT 
+-- Descriptive analysis of Film Table
+SELECT 
 	   MIN (release_year) AS min_release_year,
 	   MAX (release_year) AS max_release_year,
 	   CASE
@@ -25,10 +25,10 @@
 	   MODE()WITHIN GROUP (ORDER BY title) AS title_modal_value,
 	   MODE()WITHIN GROUP (ORDER BY rating) AS rating_modal_value
 FROM film
-GROUP BY language_id"
+GROUP BY language_id
 
-## Inner join
-"SELECT d.title AS movie_name,
+-- Inner join
+SELECT d.title AS movie_name,
        SUM (a.amount)AS revenue
 FROM payment a
 INNER JOIN rental b ON B.rental_id = A. rental_id
@@ -36,6 +36,6 @@ INNER JOIN inventory c ON c. inventory_id = b. inventory_id
 INNER JOIN film d ON d. film_id = c. film_id
 GROUP BY movie_name
 ORDER BY revenue DESC
-LIMIT 10;"
+LIMIT 10;
 
 
